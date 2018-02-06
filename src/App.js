@@ -62,12 +62,15 @@ class App extends Component {
     const vicdataText = 'Vicdata4'
     const { searchTerm, list } = this.state
     return (
-      <div className="App">
-        <h2>{vicdataText}</h2>
-      <Search value={searchTerm} onChange={this.onSearchChange}>Search:</Search>
+      <div className="page">
+        <div className="interactions">
+          <h2>{vicdataText}</h2>
+          <Search value={searchTerm} onChange={this.onSearchChange}>Search:</Search>
+        </div>
       <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss} />
         {/*<button onClick={this.onClickMe} type="button">Click Me</button>*/}
       </div>
+
     );
   }
 }
@@ -83,15 +86,18 @@ const Search = ({ value, onChange, children }) => {
 class Table extends Component {
   render() {
     const {list, pattern , onDismiss} = this.props
+    const smallColumn = {
+      width: '10%'
+    }
     return (
-      <div>
+      <div className="table">
         {list.filter(isSearched(pattern)).map(item =>
-          <div key={item.objectID}>
-              <span><a href={item.url}>{item.title}</a></span>
-              <span> Author: {item.author}</span>
-              <span> nºComments: {item.num_comments}</span>
-              <span> Points: {item.points}</span>
-              <span><Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button></span>
+          <div key={item.objectID} className="table-row">
+              <span style={{width:'20%'}}><a href={item.url}>{item.title}</a></span>
+              <span style={{width:'50%'}}> Author: {item.author}</span>
+              <span style={{smallColumn}}> nºComments: {item.num_comments}</span>
+              <span style={{smallColumn}}> Points: {item.points}</span>
+              <span style={{smallColumn}}><Button onClick={() => onDismiss(item.objectID)} className="button-inline">Dismiss</Button></span>
             </div>
         )}
       </div>
