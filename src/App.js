@@ -64,7 +64,7 @@ class App extends Component {
     return (
       <div className="App">
         <h2>{vicdataText}</h2>
-      <Search value={searchTerm} onChange={this.onSearchChange} />
+      <Search value={searchTerm} onChange={this.onSearchChange}>Search:</Search>
       <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss} />
         {/*<button onClick={this.onClickMe} type="button">Click Me</button>*/}
       </div>
@@ -72,15 +72,12 @@ class App extends Component {
   }
 }
 
-class Search extends Component {
-  render() {
-    const {value, onChange} = this.props
+const Search = ({ value, onChange, children }) => {
     return (
       <form>
-        <input type="text" value={value} onChange={onChange}></input>
+        {children}<input type="text" value={value} onChange={onChange}></input>
       </form>
     )
-  }
 }
 
 class Table extends Component {
@@ -94,12 +91,21 @@ class Table extends Component {
               <span> Author: {item.author}</span>
               <span> nºComments: {item.num_comments}</span>
               <span> Points: {item.points}</span>
-              <span><button onClick={() => onDismiss(item.objectID)} type="button">Dismiss</button></span>
+              <span><Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button></span>
             </div>
         )}
       </div>
     )
   }
+}
+
+function Button(props) {
+    const { onClick, className = '', children } = props
+    return (
+      <button onClick={onClick} className={className} type="button">
+        {children}
+      </button>
+    )
 }
 
 export default App;
