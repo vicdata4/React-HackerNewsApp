@@ -40,9 +40,10 @@ const [
   userTwo,
   userThree
 ] = users
-console.log(userOne + '>>>' + userTwo + '>>>' + userThree)
-*/
+console.log(userOne + '>>>' + userTwo + '>>>' + userThree
+
 const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase())
+*/
 
 class App extends Component {
   constructor(props) {
@@ -53,9 +54,10 @@ class App extends Component {
     };
     this.setSearchTopStories = this.setSearchTopStories.bind(this)
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this)
-    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this)
+    this.onSearchSubmit = this.onSearchSubmit.bind(this)
     this.onDismiss = this.onDismiss.bind(this)
-    this.onClickMe = this.onClickMe.bind(this);
+    this.onClickMe = this.onClickMe.bind(this)
   }
   setSearchTopStories(result) {
     this.setState({result})
@@ -65,6 +67,11 @@ class App extends Component {
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
       .catch(e => e);
+  }
+  onSearchSubmit(event) {
+    const {searchTerm} = this.state
+    this.fetchSearchTopStories(searchTerm)
+    event.preventDefault()
   }
   componentDidMount() {
     const { searchTerm } = this.state;
@@ -86,16 +93,18 @@ class App extends Component {
   }
 
     render() {
-    const vicdataText = 'Vicdata4'
+    const vicdataText = 'HackerNews VD'
     const { searchTerm, result } = this.state
     if (!result) {return null}
     return (
       <div className="page">
         <div className="interactions">
           <h2>{vicdataText}</h2>
-          <Search value={searchTerm} onChange={this.onSearchChange}>Search:</Search>
+          <Search value={searchTerm} onChange={this.onSearchChange} onSubmit={this.onSearchSubmit}>Search:</Search>
         </div>
-      <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss} />
+        { result &&
+        <Table list={result.hits} onDismiss={this.onDismiss} />
+        }
         {/*<button onClick={this.onClickMe} type="button">Click Me</button>*/}
       </div>
 
@@ -103,23 +112,24 @@ class App extends Component {
   }
 }
 
-const Search = ({ value, onChange, children }) => {
+const Search = ({ value, onChange, children, onSubmit }) => {
     return (
-      <form>
-        {children}<input type="text" value={value} onChange={onChange}></input>
+      <form onSubmit={onSubmit}>
+      <input type="text" value={value} onChange={onChange}></input>
+      <button type="submit">{children}</button>
       </form>
     )
 }
 
 class Table extends Component {
   render() {
-    const {list, pattern , onDismiss} = this.props
+    const {list, onDismiss} = this.props
     const smallColumn = {
       width: '10%'
     }
     return (
       <div className="table">
-        {list.filter(isSearched(pattern)).map(item =>
+        {list.map(item =>
           <div key={item.objectID} className="table-row">
               <span style={{width:'20%'}}><a href={item.url}>{item.title}</a></span>
               <span style={{width:'50%'}}> Author: {item.author}</span>
