@@ -1,56 +1,23 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const DEFAULT_QUERY = 'redux';
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
+const DEFAULT_QUERY = 'redux'
+const PATH_BASE = 'https://hn.algolia.com/api/v1'
+const PATH_SEARCH = '/search'
+const PARAM_SEARCH = 'query='
 const PARAM_PAGE = 'page='
+const DEFAULT_HPP = '100'
+const PARAM_HPP = 'hitsPerPage='
 
-const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}&${PARAM_PAGE}`;
+const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}redux&${PARAM_PAGE}0&${PARAM_HPP}${DEFAULT_HPP}`;
 console.log(url)
-
-/*
-const list = [
-{
-  title: 'React',
-  url: 'https://facebook.github.io/react/',
-  author: 'Jordan Walke',
-  num_comments: 3,
-  points: 4,
-  objectID: 0
-},
-{
-  title: 'Redux',
-  url: 'https://github.com/reactjs/redux',
-  author: 'Dan Abramov, Andrew Clark',
-  num_comments: 2,
-  points: 5,
-  objectID: 1
-}
-];
-
-const user = {firstname: 'Robin', lastname: 'Wieruch'}
-console.log(user)
-const { firstname, lastname } = user
-console.log(firstname + ' ' + lastname)
-const users = ['Luis', 'Andrew', 'Dan']
-console.log(users)
-const [
-  userOne,
-  userTwo,
-  userThree
-] = users
-console.log(userOne + '>>>' + userTwo + '>>>' + userThree
-
-const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase())
-*/
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      result: null,
+      results: null,
+      searchKey: '',
       searchTerm: DEFAULT_QUERY
     };
     this.setSearchTopStories = this.setSearchTopStories.bind(this)
@@ -58,7 +25,6 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this)
     this.onSearchSubmit = this.onSearchSubmit.bind(this)
     this.onDismiss = this.onDismiss.bind(this)
-    this.onClickMe = this.onClickMe.bind(this)
   }
   setSearchTopStories(result) {
     const { hits, page } = result
@@ -68,10 +34,10 @@ class App extends Component {
     this.setState({result: { hits:updatedHits, page }})
   }
   fetchSearchTopStories(searchTerm, page = 0) {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
-      .catch(e => e);
+      .catch(e => e)
   }
   onSearchSubmit(event) {
     const {searchTerm} = this.state
@@ -79,14 +45,13 @@ class App extends Component {
     event.preventDefault()
   }
   componentDidMount() {
-    const { searchTerm } = this.state;
-    this.fetchSearchTopStories(searchTerm);
+    const { searchTerm } = this.state
+    this.fetchSearchTopStories(searchTerm)
   }
   onDismiss(id) {
     const isNotId = item => item.objectID !== id
     const updatedHits = this.state.result.hits.filter(isNotId)
     this.setState({
-      /*result: Object.assign({}, this.state.result, { hits: updatedHits })*/
       result: { ...this.state.result, hits: updatedHits }
     })
   }
@@ -114,7 +79,6 @@ class App extends Component {
         <div className="interactions">
           <Button onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}>More</Button>
         </div>
-        {/*<button onClick={this.onClickMe} type="button">Click Me</button>*/}
       </div>
 
     );
@@ -140,8 +104,8 @@ class Table extends Component {
       <div className="table">
         {list.map(item =>
           <div key={item.objectID} className="table-row">
-              <span style={{width:'20%'}}><a href={item.url}>{item.title}</a></span>
-              <span style={{width:'50%'}}> Author: {item.author}</span>
+              <span style={{width:'40%'}}><a href={item.url}>{item.title}</a></span>
+              <span style={{width:'30%'}}> Author: {item.author}</span>
               <span style={{smallColumn}}> nºComments: {item.num_comments}</span>
               <span style={{smallColumn}}> Points: {item.points}</span>
               <span style={{smallColumn}}><Button onClick={() => onDismiss(item.objectID)} className="button-inline">Dismiss</Button></span>
