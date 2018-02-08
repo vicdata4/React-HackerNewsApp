@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
-
-const DEFAULT_QUERY = 'redux'
-const PATH_BASE = 'https://hn.algolia.com/api/v1'
-const PATH_SEARCH = '/search'
-const PARAM_SEARCH = 'query='
-const PARAM_PAGE = 'page='
-const DEFAULT_HPP = '40'
-const PARAM_HPP = 'hitsPerPage='
-
+import { DEFAULT_QUERY, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP } from './constants'
+import { Search } from './Search/search'
+import { Table } from './Table/table'
+import { Button } from './Button/button'
 const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}redux&${PARAM_PAGE}0&${PARAM_HPP}${DEFAULT_HPP}`;
-console.log(url)
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       results: null,
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
       error: null
-    };
+    }
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this)
     this.setSearchTopStories = this.setSearchTopStories.bind(this)
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this)
@@ -84,49 +78,8 @@ class App extends Component {
           <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>More</Button>
         </div>
       </div>
-
     );
   }
-}
-
-const Search = ({ value, onChange, children, onSubmit }) => {
-    return (
-      <form onSubmit={onSubmit}>
-      <input type="text" value={value} onChange={onChange}></input>
-      <button type="submit">{children}</button>
-      </form>
-    )
-}
-
-class Table extends Component {
-  render() {
-    const {list, onDismiss} = this.props
-    const smallColumn = {
-      width: '10%'
-    }
-    return (
-      <div className="table">
-        {list.map(item =>
-          <div key={item.objectID} className="table-row">
-              <span style={{width:'40%'}}><a href={item.url}>{item.title}</a></span>
-              <span style={{width:'30%'}}> Author: {item.author}</span>
-              <span style={{smallColumn}}> nºComments: {item.num_comments}</span>
-              <span style={{smallColumn}}> Points: {item.points}</span>
-              <span style={{smallColumn}}><Button onClick={() => onDismiss(item.objectID)} className="button-inline">Dismiss</Button></span>
-            </div>
-        )}
-      </div>
-    )
-  }
-}
-
-function Button(props) {
-    const { onClick, className = '', children } = props
-    return (
-      <button onClick={onClick} className={className} type="button">
-        {children}
-      </button>
-    )
 }
 
 export default App;
