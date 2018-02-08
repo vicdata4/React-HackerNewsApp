@@ -1,18 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App, { Search, Button, Table } from './App'
-
+import {Button} from './button'
 import renderer from 'react-test-renderer'
 
-describe('App', () => {
+describe('Button', () => {
   it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<App />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    const div = document.createElement('div')
+    ReactDOM.render(<Button>Give Me More</Button>, div)
   })
-
   test('has a valid snapshot', () => {
-    const component = renderer.create( <App /> )
+    const component = renderer.create( <Button>Give Me More</Button> )
     let tree = component.toJSON()
     expect(tree).toMatchSnapshot()
   })
