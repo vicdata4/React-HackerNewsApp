@@ -7,8 +7,6 @@ import { DEFAULT_QUERY, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM
 import { Search } from './Search/search'
 import { Table } from './Table/table'
 import { Button } from './Button/button'
-const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}redux&${PARAM_PAGE}0&${PARAM_HPP}${DEFAULT_HPP}`;
-console.log(url)
 
 class App extends Component {
   constructor(props) {
