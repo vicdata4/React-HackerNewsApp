@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+
+import fetch from 'isomorphic-fetch'
+
 import { DEFAULT_QUERY, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP } from './constants'
 import { Search } from './Search/search'
 import { Table } from './Table/table'
 import { Button } from './Button/button'
 const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}redux&${PARAM_PAGE}0&${PARAM_HPP}${DEFAULT_HPP}`;
+console.log(url)
 
 class App extends Component {
   constructor(props) {
@@ -62,8 +66,8 @@ class App extends Component {
   }
   render() {
     const vicdataText = 'HackerNews VD'
-    const { searchTerm, results, searchKey, error } = this.state;
-    const page = ( results && results[searchKey] && results[searchKey].page ) || 0;
+    const { searchTerm, results, searchKey, error } = this.state
+    const page = ( results && results[searchKey] && results[searchKey].page ) || 0
     const list = ( results && results[searchKey] && results[searchKey].hits ) || []
     return (
       <div className="page">
@@ -82,4 +86,6 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App
+
+export { Button, Search, Table }
