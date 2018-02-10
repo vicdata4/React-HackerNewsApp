@@ -34,8 +34,7 @@ class App extends Component {
     const oldHits = results && results[searchKey] ? results[searchKey].hits : []
     const updatedHits = [...oldHits,...hits]
 
-    this.setState({results: { ...results, [searchKey]: { hits: updatedHits, page } }})
-    isLoading: false
+    this.setState({results: { ...results, [searchKey]: { hits: updatedHits, page } }, isLoading: false})
   }
   fetchSearchTopStories(searchTerm, page = 0) {
     this.setState({ isLoading: true })
@@ -70,7 +69,6 @@ class App extends Component {
     const { searchTerm, results, searchKey, error, isLoading } = this.state
     const page = ( results && results[searchKey] && results[searchKey].page ) || 0
     const list = ( results && results[searchKey] && results[searchKey].hits ) || []
-    const Loading = () => <div>Loading...</div>
     return (
       <div className="page">
         <div className="interactions">
@@ -81,13 +79,20 @@ class App extends Component {
         <Table list={list} onDismiss={this.onDismiss} />
         }
         <div className="interactions">
-          { isLoading ? <Loading /> :
-          <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>More</Button> }
+          <ButtonWithLoading
+            isLoading={isLoading}
+            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+            More
+          </ButtonWithLoading>
         </div>
       </div>
     );
   }
 }
+
+const Loading = () => <div>Loading ...</div>
+const withLoading = (Component) => ({ isLoading, ...rest }) => isLoading ? <Loading /> : <Component { ...rest } />
+const ButtonWithLoading = withLoading(Button);
 
 export default App
 
