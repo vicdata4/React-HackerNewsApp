@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './App.css'
-
 import fetch from 'isomorphic-fetch'
 
 import { DEFAULT_QUERY, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP } from './constants'
@@ -16,7 +15,9 @@ class App extends Component {
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
       error: null,
-      isLoading:false
+      isLoading:false,
+      sortKey: 'NONE',
+      isSortReverse: false
     }
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this)
     this.setSearchTopStories = this.setSearchTopStories.bind(this)
@@ -24,6 +25,11 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this)
     this.onSearchSubmit = this.onSearchSubmit.bind(this)
     this.onDismiss = this.onDismiss.bind(this)
+    this.onSort = this.onSort.bind(this)
+  }
+  onSort(sortKey) {
+     const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse;
+     this.setState({ sortKey, isSortReverse });
   }
   needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm]
@@ -66,7 +72,7 @@ class App extends Component {
   }
   render() {
     const vicdataText = 'HackerNews VD'
-    const { searchTerm, results, searchKey, error, isLoading } = this.state
+    const { searchTerm, results, searchKey, error, isLoading, sortKey, isSortReverse } = this.state
     const page = ( results && results[searchKey] && results[searchKey].page ) || 0
     const list = ( results && results[searchKey] && results[searchKey].hits ) || []
     return (
@@ -75,15 +81,9 @@ class App extends Component {
           <h2>{vicdataText}</h2>
           <Search value={searchTerm} onChange={this.onSearchChange} onSubmit={this.onSearchSubmit}>Search:</Search>
         </div>
-        { error ? <div className="interacitons"><p>Something went wrong.</p></div> :
-        <Table list={list} onDismiss={this.onDismiss} />
-        }
+        { error ? <div className="interacitons"><p>Something went wrong.</p></div> : <Table list={list} onDismiss={this.onDismiss} sortKey={sortKey} onSort={this.onSort} isSortReverse={isSortReverse}/> }
         <div className="interactions">
-          <ButtonWithLoading
-            isLoading={isLoading}
-            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-            More
-          </ButtonWithLoading>
+          <ButtonWithLoading isLoading={isLoading} onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>More</ButtonWithLoading>
         </div>
       </div>
     );
@@ -91,6 +91,7 @@ class App extends Component {
 }
 
 const Loading = () => <div>Loading ...</div>
+/*const withLoading = (Component) => (props) => props.isLoading ? <Loading /> : <Component { ...props } />*/
 const withLoading = (Component) => ({ isLoading, ...rest }) => isLoading ? <Loading /> : <Component { ...rest } />
 const ButtonWithLoading = withLoading(Button);
 
