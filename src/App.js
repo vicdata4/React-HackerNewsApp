@@ -15,9 +15,7 @@ class App extends Component {
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
       error: null,
-      isLoading:false,
-      sortKey: 'NONE',
-      isSortReverse: false
+      isLoading:false
     }
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this)
     this.setSearchTopStories = this.setSearchTopStories.bind(this)
@@ -25,11 +23,6 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this)
     this.onSearchSubmit = this.onSearchSubmit.bind(this)
     this.onDismiss = this.onDismiss.bind(this)
-    this.onSort = this.onSort.bind(this)
-  }
-  onSort(sortKey) {
-     const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse;
-     this.setState({ sortKey, isSortReverse });
   }
   needsToSearchTopStories(searchTerm) {
     return !this.state.results[searchTerm]
@@ -72,7 +65,7 @@ class App extends Component {
   }
   render() {
     const vicdataText = 'HackerNews VD'
-    const { searchTerm, results, searchKey, error, isLoading, sortKey, isSortReverse } = this.state
+    const { searchTerm, results, searchKey, error, isLoading } = this.state
     const page = ( results && results[searchKey] && results[searchKey].page ) || 0
     const list = ( results && results[searchKey] && results[searchKey].hits ) || []
     return (
@@ -81,7 +74,7 @@ class App extends Component {
           <h2>{vicdataText}</h2>
           <Search value={searchTerm} onChange={this.onSearchChange} onSubmit={this.onSearchSubmit}>Search:</Search>
         </div>
-        { error ? <div className="interacitons"><p>Something went wrong.</p></div> : <Table list={list} onDismiss={this.onDismiss} sortKey={sortKey} onSort={this.onSort} isSortReverse={isSortReverse}/> }
+        { error ? <div className="interacitons"><p>Something went wrong.</p></div> : <Table list={list} onDismiss={this.onDismiss}/> }
         <div className="interactions">
           <ButtonWithLoading isLoading={isLoading} onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>More</ButtonWithLoading>
         </div>

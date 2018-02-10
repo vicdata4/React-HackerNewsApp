@@ -18,8 +18,21 @@ const Sort = ({ sortKey, onSort, children, activeSortKey }) => {
 }
 
 export class Table extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sortKey: 'NONE',
+      isSortReverse: false
+    }
+    this.onSort = this.onSort.bind(this);
+  }
+  onSort(sortKey) {
+     const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse;
+     this.setState({ sortKey, isSortReverse });
+  }
   render() {
-    const {list, onDismiss, sortKey, onSort, isSortReverse} = this.props
+    const {list, onDismiss} = this.props
+    const {sortKey, onSort, isSortReverse} = this.state
     const smallColumn = { width: '10%' }
     const sortedList = SORTS[sortKey](list);
     const reverseSortedList = isSortReverse ? sortedList.reverse() : sortedList;
@@ -27,16 +40,16 @@ export class Table extends Component {
       <div className="table">
         <div className="table-header">
           <span style={{ width: '40%' }}>
-            <Sort sortKey={'TITLE'} onSort={onSort} activeSortKey={sortKey}>Title</Sort>
+            <Sort sortKey={'TITLE'} onSort={this.onSort} activeSortKey={sortKey}>Title</Sort>
           </span>
           <span style={{ width: '30%' }}>
-            <Sort sortKey={'AUTHOR'} onSort={onSort} activeSortKey={sortKey}>Author</Sort>
+            <Sort sortKey={'AUTHOR'} onSort={this.onSort} activeSortKey={sortKey}>Author</Sort>
           </span>
           <span style={{ width: '10%' }}>
-            <Sort sortKey={'COMMENTS'} onSort={onSort} activeSortKey={sortKey}>Comments</Sort>
+            <Sort sortKey={'COMMENTS'} onSort={this.onSort} activeSortKey={sortKey}>Comments</Sort>
           </span>
           <span style={{ width: '10%' }}>
-            <Sort sortKey={'POINTS'} onSort={onSort} activeSortKey={sortKey}>Points</Sort>
+            <Sort sortKey={'POINTS'} onSort={this.onSort} activeSortKey={sortKey}>Points</Sort>
           </span>
           <span style={{ width: '10%' }}>Archive</span>
         </div>
