@@ -1,4 +1,4 @@
-The Road to learn React by Robin Wieruch
+Book: The Road to learn React by Robin Wieruch
 
 ## Introduction to React
 - Hi,mynameisReact
@@ -19,7 +19,7 @@ The Road to learn React by Robin Wieruch
 - Unidirectional Data Flow
 - Bindings
 - Event Handler
-## CONTENTS
+## Contents
 - Interactions with Forms and Events
 - ES6 Destructuring
 - Controlled Components
@@ -44,15 +44,15 @@ The Road to learn React by Robin Wieruch
 - Unit Tests with Enzyme
 - Component Interface with PropTypes
 ## Advanced React Components
-RefaDOMElement
-Loading...
-Higher-OrderComponents
-Advanced Sorting
+- Refa DOM Element
+- Loading...
+- Higher-OrderComponents
+- Advanced Sorting
 ## State Management in React and beyond
-Lifting State
-Revisited:setState()
-Taming the State
+- Lifting State
+- Revisited:setState()
+- Taming the State
 ## Final Steps to Production
-Eject
-Deploy your App
+- Eject
+- Deploy your App
 ## Outline
