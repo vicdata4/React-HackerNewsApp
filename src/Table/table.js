@@ -32,7 +32,7 @@ export class Table extends Component {
   }
   render() {
     const {list, onDismiss} = this.props
-    const {sortKey, onSort, isSortReverse} = this.state
+    const {sortKey, isSortReverse} = this.state
     const smallColumn = { width: '10%' }
     const sortedList = SORTS[sortKey](list);
     const reverseSortedList = isSortReverse ? sortedList.reverse() : sortedList;
@@ -60,7 +60,7 @@ export class Table extends Component {
               <span style={{smallColumn}}> nºComments: {item.num_comments}</span>
               <span style={{smallColumn}}> Points: {item.points}</span>
               <span style={{smallColumn}}><Button onClick={() => onDismiss(item.objectID)} className="button-inline">Dismiss</Button></span>
-            </div>
+          </div>
         )}
       </div>
     )

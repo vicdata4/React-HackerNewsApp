@@ -7,6 +7,13 @@ import { Search } from './Search/search'
 import { Table } from './Table/table'
 import { Button } from './Button/button'
 
+const updateSearchTopStoriesState = (hits, page) => (prevState) => {
+  const { searchKey, results } = prevState
+  const oldHits = results && results[searchKey] ? results[searchKey].hits : []
+  const updatedHits = [ ...oldHits, ...hits ]
+  return { results: { ...results, [searchKey]: { hits: updatedHits, page } },isLoading: false }
+}
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -29,11 +36,7 @@ class App extends Component {
   }
   setSearchTopStories(result) {
     const { hits, page } = result
-    const { searchKey, results } = this.state
-    const oldHits = results && results[searchKey] ? results[searchKey].hits : []
-    const updatedHits = [...oldHits,...hits]
-
-    this.setState({results: { ...results, [searchKey]: { hits: updatedHits, page } }, isLoading: false})
+    this.setState(updateSearchTopStoriesState(hits, page))
   }
   fetchSearchTopStories(searchTerm, page = 0) {
     this.setState({ isLoading: true })
@@ -79,7 +82,7 @@ class App extends Component {
           <ButtonWithLoading isLoading={isLoading} onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>More</ButtonWithLoading>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -89,5 +92,4 @@ const withLoading = (Component) => ({ isLoading, ...rest }) => isLoading ? <Load
 const ButtonWithLoading = withLoading(Button);
 
 export default App
-
 export { Button, Search, Table }
